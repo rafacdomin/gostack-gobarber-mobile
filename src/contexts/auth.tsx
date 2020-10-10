@@ -8,8 +8,15 @@ import React, {
 import AsyncStorage from '@react-native-community/async-storage';
 import api from '../services/api';
 
+interface UserProps {
+  id: string;
+  name: string;
+  email: string;
+  avatar_url: string;
+}
+
 interface AuthContextData {
-  user: object | null;
+  user: UserProps | null;
   loading: boolean;
   Login(userData: Request): Promise<void>;
   Logout(): void;
@@ -23,7 +30,7 @@ interface Request {
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 export const AuthProvider: React.FC = ({ children }) => {
-  const [user, setUser] = useState<object | null>(null);
+  const [user, setUser] = useState<UserProps | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
