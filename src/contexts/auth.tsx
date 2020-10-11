@@ -19,6 +19,7 @@ interface AuthContextData {
   user: UserProps | null;
   loading: boolean;
   Login(userData: Request): Promise<void>;
+  updateUser(userData: UserProps): Promise<void>;
   Logout(): void;
 }
 
@@ -65,6 +66,12 @@ export const AuthProvider: React.FC = ({ children }) => {
     ]);
   }, []);
 
+  const updateUser = useCallback(async (data: UserProps) => {
+    setUser(data);
+
+    await AsyncStorage.setItem('@GoBarber:user', JSON.stringify(data));
+  }, []);
+
   const Logout = useCallback(async () => {
     setUser(null);
     api.defaults.headers.Authorization = '';
@@ -74,7 +81,7 @@ export const AuthProvider: React.FC = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user: user, loading: loading, Login, Logout }}>
+      value={{ user: user, loading: loading, Login, Logout, updateUser }}>
       {children}
     </AuthContext.Provider>
   );
